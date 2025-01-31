@@ -25,7 +25,7 @@ public class FPSSocketStreaming : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "Networking",
+				"Core", "Networking", "Sockets", 
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
