@@ -3,41 +3,40 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Common/TcpListener.h"
-#include "Common/TcpSocketBuilder.h"
 #include "DataStreamingSubsystem.generated.h"
 
-
-#define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 7787
-#define BUFFER_SIZE 4096
-
+class USerialCom;
 /**
  * 
  */
 UCLASS()
-class UDataStreamingSubsystem : public UGameInstance
+class UDataStreamingSubsystem : public UTickableWorldSubsystem
 {
 	GENERATED_BODY()
 
 public:
 	
-	virtual void Init() override;
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
-	virtual void Shutdown() override;
+	virtual void Deinitialize() override;
+
+	virtual void Tick(float DeltaTime) override;
 	
-	bool Tick(float DeltaTime);
+	virtual TStatId GetStatId() const override
+	{
+		return GetStatID();
+	}
 
 protected:
 
-	bool ClientConnected(FSocket* Socket, const FIPv4Endpoint& Endpoint);
+	TObjectPtr<USerialCom> SerialCom;
 
-	void SendDataToClient(float Framerate);
-	
+	TArray<float> PowerArray;
+	TArray<float> FPSArray;
+
+	FString FinalFileDestination;
 
 private:
-	FSocket* ClientSocket = nullptr;
-	
-	TUniquePtr<FTcpListener> ServerListner;
+
 	FTSTicker::FDelegateHandle TickDelegateHandle;
 };

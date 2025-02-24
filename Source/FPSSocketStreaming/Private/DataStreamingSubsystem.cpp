@@ -2,61 +2,66 @@
 
 #include "DataStreamingSubsystem.h"
 
-#include "Common/TcpSocketBuilder.h"
-#include "Sockets.h"
+#include "FPSSocketStreaming.h"
+#include "SerialCom.h"
 
 
-void UDataStreamingSubsystem::Init()
-{
-	// Register delegate for ticker callback
-	TickDelegateHandle = FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateUObject(this,&UDataStreamingSubsystem::Tick));
-
-	Super::Init();
-	
-	FIPv4Address IPAddress;
-	FIPv4Address::Parse(FString(SERVER_IP),IPAddress);
-	FIPv4Endpoint Endpoint(IPAddress,SERVER_PORT);
-
-	ServerListner = MakeUnique<FTcpListener>(Endpoint);
-
-	ServerListner->OnConnectionAccepted().BindUObject(this,&UDataStreamingSubsystem::ClientConnected);
-
-	ServerListner->Run();
-
-}
-
-void UDataStreamingSubsystem::Shutdown()
-{
-	FTSTicker::GetCoreTicker().RemoveTicker(TickDelegateHandle);
-	Super::Shutdown();
-}
-
-bool UDataStreamingSubsystem::Tick(float DeltaTime)
-{
-	if(ClientSocket)
-		SendDataToClient(1.0f/DeltaTime);
-
-	return true;
-}
-
-
-bool UDataStreamingSubsystem::ClientConnected(FSocket* Socket,const FIPv4Endpoint& Endpoint)
+void UDataStreamingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 
-	ClientSocket = Socket;
-	return true;
-}
+	Super::Initialize(Collection);
 
-void UDataStreamingSubsystem::SendDataToClient(float Framerate)
-{
-	TArray<uint8> Bytes;
-	FMemoryWriter MemoryWriter(Bytes);
-
-	MemoryWriter << Framerate;
-
-	int32 BytesSent = 0;
-	if(!ClientSocket->Send(Bytes.GetData(), Bytes.Num(), BytesSent))
+	// COM PORT OPENING
+	bool bIsPortOpened = false;
+	SerialCom = USerialCom::OpenComPortWithFlowControl(bIsPortOpened, COM_PORT, BAUD_RATE);
+	if(!bIsPortOpened)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Unable to stream framerate"));
+		UE_LOG(LogTemp,Error,TEXT("Can't open port COM%d"),COM_PORT);
+		return;
+	}
+
+	SerialCom->Flush();
+
+	// RESULTS FILE OPENING
+
+	FinalFileDestination = FPlatformProcess::UserDir()+FString(FILE_DESTINATION);
+
+}
+
+void UDataStreamingSubsystem::Deinitialize()
+{
+	SerialCom->Close();
+
+	//Write results in file
+
+	FString Results;
+	Results.Append("Power");
+	for (const auto Power : PowerArray)
+	{
+		Results.Append(FString(", ")+FString::SanitizeFloat(Power,2));
+	}
+	Results.Append("\n");
+	Results.Append("FPS");
+	for (const auto FPS : FPSArray)
+	{
+		Results.Append(FString(", ")+FString::SanitizeFloat(FPS,0));
+	}
+	Results.Append("\n");
+	
+	FFileHelper::SaveStringToFile(Results,*FinalFileDestination);
+	
+	Super::Deinitialize();
+}
+
+void UDataStreamingSubsystem::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	bool bDidRead = false;
+	const FString ReadResults = SerialCom->Readln(bDidRead);
+	if(bDidRead)
+	{
+		PowerArray.Add(FCString::Atof(*ReadResults));
+		FPSArray.Add(1000/DeltaTime);
 	}
 }
