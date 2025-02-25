@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-#define DO_TRACKING 1
-
+// If true, the outputed csv will contain the time of the measure
+#define TRACK_TIME 1
+// Number of the com port to read data from
 #define COM_PORT 3
+// Read speed on the serial port
 #define BAUD_RATE 115200
-
+// Path of the outputed csv file
 #define FILE_DESTINATION "/FPSSocketStreaming/Output/Results.csv"
-
-#if DO_TRACKING
 
 class FFPSSocketStreamingModule : public IModuleInterface
 {
@@ -23,4 +23,3 @@ public:
 	virtual void ShutdownModule() override;
 	
 };
-#endif
