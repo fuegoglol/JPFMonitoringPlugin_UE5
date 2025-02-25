@@ -35,7 +35,7 @@ void UDataStreamingSubsystem::Deinitialize()
 	//Write results in file
 
 	FString Results;
-	Results.Append("Power");
+	/*Results.Append("Power");
 	for (const auto Power : PowerArray)
 	{
 		Results.Append(FString(", ")+FString::SanitizeFloat(Power,2));
@@ -46,7 +46,16 @@ void UDataStreamingSubsystem::Deinitialize()
 	{
 		Results.Append(FString(", ")+FString::SanitizeFloat(FPS,0));
 	}
-	Results.Append("\n");
+	Results.Append("\n");*/
+
+
+	
+	Results.Append(Measure::DisplayHeaderRow());
+	for (auto Measure: Measures)
+	{
+		Results.Append(Measure.DisplayRow());
+	}
+
 	
 	FFileHelper::SaveStringToFile(Results,*FinalFileDestination);
 	
@@ -61,7 +70,13 @@ void UDataStreamingSubsystem::Tick(float DeltaTime)
 	const FString ReadResults = SerialCom->Readln(bDidRead);
 	if(bDidRead)
 	{
-		PowerArray.Add(FCString::Atof(*ReadResults));
-		FPSArray.Add(1000/DeltaTime);
+		/*PowerArray.Add(FCString::Atof(*ReadResults));
+		FPSArray.Add(1000/DeltaTime);*/
+		Measure M = new Measure();
+		M.FPS = 1000/DeltaTime;
+		M.Power = FCString::Atof(*ReadResult));
+		M.Time = Time::now();
+
+		Measures.Add(M);
 	}
 }
