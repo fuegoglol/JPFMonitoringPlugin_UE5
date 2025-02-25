@@ -6,6 +6,25 @@
 #include "DataStreamingSubsystem.generated.h"
 
 class USerialCom;
+
+
+struct Measure
+{
+	int64 Time;
+	float FPS;
+	float Power;
+
+	FString DisplayRow() const{
+		return Printf(TEXT("%i, $i, $f\n"), Time, FString::SanitizeFloat(Power, 2), FString::SanitizeFloat(FPS, 0));
+	};
+
+	static FString DisplayHeaderRow() 
+	{
+		return FString("Time, Power, FPS\n");
+	}
+}
+
+
 /**
  * 
  */
@@ -31,8 +50,10 @@ protected:
 
 	TObjectPtr<USerialCom> SerialCom;
 
-	TArray<float> PowerArray;
-	TArray<float> FPSArray;
+	//TArray<float> PowerArray;
+	//TArray<float> FPSArray;
+        TArray<Measure> Measures;
+
 
 	FString FinalFileDestination;
 
