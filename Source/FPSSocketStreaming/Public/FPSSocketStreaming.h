@@ -8,11 +8,12 @@
 // If true, the outputed csv will contain the time of the measure
 #define TRACK_TIME 1
 // Number of the com port to read data from
-#define COM_PORT 3
+#define COM_PORT 7
 // Read speed on the serial port
-#define BAUD_RATE 115200
+#define BAUD_RATE 9600
 // Path of the outputed csv file
-#define FILE_DESTINATION "/FPSSocketStreaming/Output/Results.csv"
+#define FILE_DESTINATION "/FPSSocketStreaming/Output/"
+#define BASE_FILENAME "Results"
 
 class FFPSSocketStreamingModule : public IModuleInterface
 {

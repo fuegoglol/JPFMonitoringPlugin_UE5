@@ -2,7 +2,6 @@
 
 #include "FPSSocketStreaming.h"
 
-#if DO_TRACKING
 #define LOCTEXT_NAMESPACE "FFPSSocketStreamingModule"
 
 
@@ -25,4 +24,3 @@ void FFPSSocketStreamingModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FFPSSocketStreamingModule, FPSSocketStreaming)
-#endif

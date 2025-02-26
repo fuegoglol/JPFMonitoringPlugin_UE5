@@ -11,8 +11,10 @@ void UDataStreamingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	Super::Initialize(Collection);
 
+	Measures.Empty();
+
 	// COM PORT OPENING
-	bool bIsPortOpened = false;
+	bIsPortOpened = false;
 	SerialCom = USerialCom::OpenComPortWithFlowControl(bIsPortOpened, COM_PORT, BAUD_RATE);
 	if(!bIsPortOpened)
 	{
@@ -24,13 +26,21 @@ void UDataStreamingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	// RESULTS FILE OPENING
 
-	FinalFileDestination = FPlatformProcess::UserDir()+FString(FILE_DESTINATION);
+	FinalFileDestination = FString::Printf(TEXT("%s%hs%hs_%s.csv"),
+		FPlatformProcess::UserDir(),
+		FILE_DESTINATION,
+		BASE_FILENAME,
+		*GetWorld()->GetMapName());
 
 }
 
 void UDataStreamingSubsystem::Deinitialize()
 {
+	if(!bIsPortOpened || !SerialCom)
+		return;
+
 	SerialCom->Close();
+
 
 	//Write results in file
 
@@ -49,8 +59,8 @@ void UDataStreamingSubsystem::Deinitialize()
 	Results.Append("\n");*/
 
 
-	
-	Results.Append(Measure::DisplayHeaderRow());
+	UE_LOG(LogTemp,Warning,TEXT("Measures length : %i"),Measures.Num());
+	Results.Append(FMeasure::DisplayHeaderRow());
 	for (auto Measure: Measures)
 	{
 		Results.Append(Measure.DisplayRow());
@@ -65,6 +75,11 @@ void UDataStreamingSubsystem::Deinitialize()
 void UDataStreamingSubsystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	Time+=DeltaTime;
+	
+	if(!bIsPortOpened || !SerialCom)
+		return;
 	
 	bool bDidRead = false;
 	const FString ReadResults = SerialCom->Readln(bDidRead);
@@ -72,10 +87,13 @@ void UDataStreamingSubsystem::Tick(float DeltaTime)
 	{
 		/*PowerArray.Add(FCString::Atof(*ReadResults));
 		FPSArray.Add(1000/DeltaTime);*/
-		Measure M = new Measure();
-		M.FPS = 1000/DeltaTime;
-		M.Power = FCString::Atof(*ReadResult));
-		M.Time = Time::now();
+		FMeasure M;
+		M.FPS = 1.0f/DeltaTime;
+		M.Power = FCString::Atof(*ReadResults);
+
+#if TRACK_TIME
+		M.Time = Time;
+#endif
 
 		Measures.Add(M);
 	}
