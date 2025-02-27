@@ -3,7 +3,7 @@ ___
 ## Purpose
 The JPFMonitoringPlugin is a small plugin that add a worldsubsystem that read a COM port of your computer to monitore the energy consumption of an Unreal Engine game using the **Joule per Frame** unit.
 
-This plugin is intended to be used by pair with an arduino setup that read power consumption. In our cas we used a SCT013 captor to do so.
+This plugin is intended to be used by pair with an arduino setup that read power consumption. In our cas we used a SCT013 captor paired with an ESP32-C6-DevKitC-1 to do so.
 
 <img src="Resources/readme_resources/arduino_monitoring_setup.jpg" alt="arduino setup" style="height:25em; width: auto; display: block; margin: auto">
 <br>
