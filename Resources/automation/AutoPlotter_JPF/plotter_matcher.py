@@ -96,17 +96,23 @@ def match(title, rolling, path1, csv_data1, path2, csv_data2):
     # Plot both the original and the smoothed data for comparison
     if not draw_smoothed_only:
         plt.plot(data1['Time'], data1['Power_per_FPS'], label='Joule/Frame (Original)', linewidth=0.5, alpha=0.4, color="cyan")
-    plt.plot(data1['Time'], data1['Smoothed'], label='Joule/Frame (Smoothed)', linewidth=1, color='blue')
+        
+    File1 = os.path.splitext(os.path.basename(path1))[0]
+    
+    plt.plot(data1['Time'], data1['Smoothed'], label=f"{File1} (Smoothed)", linewidth=1, color='blue')
     plt.plot(data1['Time'], data1['Mean'], label=f"Mean: {mean1:.2f}", linewidth=1, color='cyan')
 
     if not draw_smoothed_only:
         plt.plot(data2['Time'], data2['Power_per_FPS'], label='Joule/Frame (Original)', linewidth=0.5, alpha=0.4, color="pink")
-    plt.plot(data2['Time'], data2['Smoothed'], label='Joule/Frame (Smoothed)', linewidth=1, color='purple')
+        
+    File2 = os.path.splitext(os.path.basename(path2))[0]
+    
+    plt.plot(data2['Time'], data2['Smoothed'], label=f"{File2} (Smoothed)", linewidth=1, color='purple')
     plt.plot(data2['Time'], data2['Mean'], label=f"Mean: {mean2:.2f}", linewidth=1, color='pink')
     # empty plot to add the rolling window size to the legend
     plt.plot([], [], ' ', label=f"Rolling Window: {rolling_window}")
 
-    plt.xlabel('Time')
+    plt.xlabel('Time (s)')
     plt.ylabel('Joule/Frame')
     plt.title(title)
     plt.legend()

@@ -90,7 +90,7 @@ def auto_plot(path, csv_data, rolling_window=DEFAULT_ROLLING_WINDOW):
     # empty plot to add the rolling window size to the legend
     plt.plot([], [], ' ', label=f"Rolling Window: {rolling_window}")
 
-    plt.xlabel('Time')
+    plt.xlabel('Time (s)')
     plt.ylabel('Joule/Frame')
     plt.title(f"{base_filename} - Joule/Frame over Time")
     plt.legend()
