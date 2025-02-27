@@ -2,7 +2,7 @@
 
 #include "DataStreamingSubsystem.h"
 
-#include "FPSSocketStreaming.h"
+#include "JPFMonitoringPlugin.h"
 #include "SerialCom.h"
 
 
@@ -45,21 +45,9 @@ void UDataStreamingSubsystem::Deinitialize()
 	//Write results in file
 
 	FString Results;
-	/*Results.Append("Power");
-	for (const auto Power : PowerArray)
-	{
-		Results.Append(FString(", ")+FString::SanitizeFloat(Power,2));
-	}
-	Results.Append("\n");
-	Results.Append("FPS");
-	for (const auto FPS : FPSArray)
-	{
-		Results.Append(FString(", ")+FString::SanitizeFloat(FPS,0));
-	}
-	Results.Append("\n");*/
+	
 
-
-	UE_LOG(LogTemp,Warning,TEXT("Measures length : %i"),Measures.Num());
+	UE_LOG(LogTemp, Display,TEXT("Measures length : %i"),Measures.Num());
 	Results.Append(FMeasure::DisplayHeaderRow());
 	for (auto Measure: Measures)
 	{
@@ -90,10 +78,7 @@ void UDataStreamingSubsystem::Tick(float DeltaTime)
 		FMeasure M;
 		M.FPS = 1.0f/DeltaTime;
 		M.Power = FCString::Atof(*ReadResults);
-
-#if TRACK_TIME
 		M.Time = Time;
-#endif
 
 		Measures.Add(M);
 	}

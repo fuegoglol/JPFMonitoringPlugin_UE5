@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class FPSSocketStreaming : ModuleRules
+public class JPFMonitoringPlugin : ModuleRules
 {
-	public FPSSocketStreaming(ReadOnlyTargetRules Target) : base(Target)
+	public JPFMonitoringPlugin(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
