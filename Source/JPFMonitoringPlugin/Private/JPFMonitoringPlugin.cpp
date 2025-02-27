@@ -1,12 +1,12 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "FPSSocketStreaming.h"
+#include "JPFMonitoringPlugin.h"
 
 #if DO_TRACKING
-#define LOCTEXT_NAMESPACE "FFPSSocketStreamingModule"
+#define LOCTEXT_NAMESPACE "FJPFMonitoringPluginModule"
 
 
-void FFPSSocketStreamingModule::StartupModule()
+void FJPFMonitoringPluginModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 
@@ -14,7 +14,7 @@ void FFPSSocketStreamingModule::StartupModule()
 }
 
 
-void FFPSSocketStreamingModule::ShutdownModule()
+void FJPFMonitoringPluginModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -24,5 +24,5 @@ void FFPSSocketStreamingModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FFPSSocketStreamingModule, FPSSocketStreaming)
+IMPLEMENT_MODULE(FJPFMonitoringPluginModule, JPFMonitoringPlugin)
 #endif

@@ -2,7 +2,7 @@
 
 #include "DataStreamingSubsystem.h"
 
-#include "FPSSocketStreaming.h"
+#include "JPFMonitoringPlugin.h"
 #include "SerialCom.h"
 
 

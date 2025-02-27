@@ -12,9 +12,9 @@
 // Read speed on the serial port
 #define BAUD_RATE 115200
 // Path of the outputed csv file
-#define FILE_DESTINATION "/FPSSocketStreaming/Output/Results.csv"
+#define FILE_DESTINATION "/JPFMonitoringPlugin/Output/Results.csv"
 
-class FFPSSocketStreamingModule : public IModuleInterface
+class FJPFMonitoringPluginModule : public IModuleInterface
 {
 public:
 

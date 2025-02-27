@@ -73,7 +73,8 @@ def match(title, rolling, path1, csv_data1, path2, csv_data2):
         data2['Mean'] = mean2
 
     # Get the base filename without extension
-    output_filename = f"{title}_chart_rw{rolling_window}.png"
+    smoothed_str = "_smoothed" if draw_smoothed_only else ""
+    output_filename = f"{title}_chart_rw{rolling_window}{smoothed_str}.png"
 
 
     # -------------------------
