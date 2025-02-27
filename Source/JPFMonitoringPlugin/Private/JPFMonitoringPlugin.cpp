@@ -2,7 +2,6 @@
 
 #include "JPFMonitoringPlugin.h"
 
-#if DO_TRACKING
 #define LOCTEXT_NAMESPACE "FJPFMonitoringPluginModule"
 
 
@@ -25,4 +24,3 @@ void FJPFMonitoringPluginModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FJPFMonitoringPluginModule, JPFMonitoringPlugin)
-#endif

@@ -2,6 +2,9 @@
 .vs/
 .idea/
 
+# Automation subfolder
+!Resources/**/
+
 # Compiled Object files
 *.slo
 *.lo
