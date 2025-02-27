@@ -18,21 +18,12 @@ struct FMeasure
 	float Power = 0.f;
 
 	FString DisplayRow() const{
-#if TRACK_TIME
 		return FString::Printf(TEXT("%5.4f, %5.2f, %d\n"), Time, Power, static_cast<int>(FMath::RoundHalfToEven(FPS)));
-#else
-		return FString::Printf(TEXT("%s, %s\n"), *FString::SanitizeFloat(Power, 2), *FString::SanitizeFloat(FPS, 0));
-#endif
-		
 	};
 
 	static FString DisplayHeaderRow() 
 	{
-#if TRACK_TIME
 		return FString("Time, Power, FPS\n");
-#else
-		return FString("Power, FPS\n");
-#endif
 	}
 };
 

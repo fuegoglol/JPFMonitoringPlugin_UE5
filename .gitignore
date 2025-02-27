@@ -1,9 +1,7 @@
 # Visual Studio 2015 user specific files
 .vs/
 .idea/
-
-# Automation subfolder
-!Resources/**/
+Resources/.idea/*
 
 # Compiled Object files
 *.slo
