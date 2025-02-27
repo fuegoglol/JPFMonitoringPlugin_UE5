@@ -47,7 +47,7 @@ void UDataStreamingSubsystem::Deinitialize()
 	FString Results;
 	
 
-	UE_LOG(LogTemp, Info,TEXT("Measures length : %i"),Measures.Num());
+	UE_LOG(LogTemp, Display,TEXT("Measures length : %i"),Measures.Num());
 	Results.Append(FMeasure::DisplayHeaderRow());
 	for (auto Measure: Measures)
 	{

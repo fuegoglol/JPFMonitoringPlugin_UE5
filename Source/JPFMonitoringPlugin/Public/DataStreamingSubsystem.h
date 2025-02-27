@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FPSSocketStreaming.h"
 #include "DataStreamingSubsystem.generated.h"
 
 class USerialCom;
