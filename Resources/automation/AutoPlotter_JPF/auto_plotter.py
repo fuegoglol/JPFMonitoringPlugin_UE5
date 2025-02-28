@@ -40,7 +40,9 @@ def sanitize_data(data, z_threshold=3):
 
     if final_count < initial_count:
         print(f"Sanitized dataset: removed {initial_count - final_count} of {initial_count} rows.")
-
+    else:
+        print("No rows removed during sanitization.")
+        
     # Reset the index after removing rows to ensure it is continuous
     return data.reset_index(drop=True)
 
