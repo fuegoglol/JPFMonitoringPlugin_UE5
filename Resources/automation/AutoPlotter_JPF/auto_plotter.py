@@ -29,8 +29,14 @@ def sanitize_data(data, z_threshold=3):
     # Remove rows with non-positive FPS (to prevent division by zero)
     data = data[data[' FPS'] > 0]
 
-    # Compute z-scores for 'Power' and 'FPS' only
-    numeric_cols = [' Power', ' FPS']
+    numeric_cols = [' Power']
+
+    # try to detect if FPS are at fixed value
+    if data[' FPS'].nunique() == 1:
+        print(f"Fixed FPS detected: {data[' FPS'].unique()[0]}")
+    else:
+        numeric_cols.append(' FPS')
+
     z_scores = np.abs(zscore(data[numeric_cols]))
 
     # Keep only rows where all z-scores are below the threshold

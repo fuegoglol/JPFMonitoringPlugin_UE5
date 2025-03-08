@@ -33,8 +33,15 @@ def sanitize_data(data, z_threshold=3):
         # Remove rows with non-positive FPS (to prevent division by zero)
         data = data[data[' FPS'] > 0]
 
-        # Compute z-scores for 'Power' and 'FPS' only
-        numeric_cols = [' Power', ' FPS']
+        numeric_cols = [' Power']
+
+        # try to detect if FPS are at fixed value
+        if data[' FPS'].nunique() == 1:
+            print(f"Fixed FPS detected: {data[' FPS'].unique()[0]}")
+        else:
+            numeric_cols.append(' FPS')
+
+        # Compute z-scores for 'Power' (and 'FPS' in case of varying FPS)
         z_scores = np.abs(zscore(data[numeric_cols]))
 
         # Keep only rows where all z-scores are below the threshold
@@ -183,15 +190,15 @@ def match_benchmark(title, rolling, path1, csv_data1, path2, csv_data2):
 
     File1 = os.path.splitext(os.path.basename(path1))[0]
 
-    plt.plot(data1['Time'], data1['minSmoothed'], label=f"min {File1}", linewidth=1, color='cyan')
-    plt.plot(data1['Time'], data1['avgSmoothed'], label=f"avg {File1}", linewidth=1, color='lightblue')
-    plt.plot(data1['Time'], data1['maxSmoothed'], label=f"max {File1}", linewidth=1, color='purple')
+    plt.plot(data1['Time'], data1['minSmoothed'], label=f"min - {csv1_label}", linewidth=1, color='cyan')
+    plt.plot(data1['Time'], data1['avgSmoothed'], label=f"avg - {csv1_label}", linewidth=1, color='lightblue')
+    plt.plot(data1['Time'], data1['maxSmoothed'], label=f"max - {csv1_label}", linewidth=1, color='purple')
 
     File2 = os.path.splitext(os.path.basename(path2))[0]
 
-    plt.plot(data2['Time'], data2['minSmoothed'], label=f"min {File2}", linewidth=1, color='pink')
-    plt.plot(data2['Time'], data2['avgSmoothed'], label=f"avg {File2}", linewidth=1, color='orange')
-    plt.plot(data2['Time'], data2['maxSmoothed'], label=f"max {File2}", linewidth=1, color='red')
+    plt.plot(data2['Time'], data2['minSmoothed'], label=f"min - {csv2_label}", linewidth=1, color='pink')
+    plt.plot(data2['Time'], data2['avgSmoothed'], label=f"avg - {csv2_label}", linewidth=1, color='orange')
+    plt.plot(data2['Time'], data2['maxSmoothed'], label=f"max - {csv2_label}", linewidth=1, color='red')
 
     # empty plot to add the rolling window size to the legend
     plt.plot([], [], ' ', label=f"Rolling Window: {rolling_window}")
@@ -248,6 +255,11 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Error reading the CSV file: {e}")
         sys.exit(1)
+    csv1_label = input("Enter the legend label for the first CSV file (max 15 characters): ").strip()
+    # shortening the label to 15 characters
+    if len(csv1_label) > 15:
+        csv1_label = csv1_label[:15]
+
 
     csv_path_2 = input("Enter the path to the second CSV file (will be green): ").strip().strip("\"")
     try:
@@ -255,6 +267,10 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Error reading the CSV file: {e}")
         sys.exit(1)
+    csv2_label = input("Enter the legend label for the second CSV file (max 15 characters): ").strip()
+    # shortening the label to 15 characters
+    if len(csv2_label) > 15:
+        csv2_label = csv2_label[:15]
 
     if is_benchmark_mode:
         match_benchmark(plot_title, rolling_window, csv_path_1, csv_data_1, csv_path_2, csv_data_2)
