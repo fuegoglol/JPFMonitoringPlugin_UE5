@@ -31,7 +31,7 @@ struct FMeasure
  * 
  */
 UCLASS()
-class UDataStreamingSubsystem : public UTickableWorldSubsystem
+class UDataStreamingSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -41,12 +41,7 @@ public:
 
 	virtual void Deinitialize() override;
 
-	virtual void Tick(float DeltaTime) override;
-	
-	virtual TStatId GetStatId() const override
-	{
-		return GetStatID();
-	}
+	bool Tick(float DeltaTime);
 
 protected:
 
@@ -63,6 +58,7 @@ protected:
 
 	FString FinalFileDestination;
 	bool bIsPortOpened;
+	FTimerHandle QuitTimerHandle;
 
 private:
 

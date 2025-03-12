@@ -146,7 +146,9 @@ bool USerialCom::OpenWFC(int32 nPort, int32 nBaud, bool bDTR, bool bRTS)
 	if (m_hIDComDev == NULL)
 	{
 		unsigned long dwError = GetLastError();
-		UE_LOG(LogTemp, Error, TEXT("Failed to open port COM%d (%s). Error: %08X"), nPort, *szPort, dwError);
+
+		UE_LOG(LogTemp, Warning, TEXT("Failed to open port COM%d (%s). Error: %08X"), nPort, *szPort, dwError);
+
 		return false;
 	}
 
@@ -197,7 +199,7 @@ bool USerialCom::OpenWFC(int32 nPort, int32 nBaud, bool bDTR, bool bRTS)
 		if (m_OverlappedWrite->hEvent != NULL) CloseHandle(m_OverlappedWrite->hEvent);
 		CloseHandle(m_hIDComDev);
 		m_hIDComDev = NULL;
-		UE_LOG(LogTemp, Error, TEXT("Failed to setup port COM%d. Error: %08X"), nPort, dwError);
+		UE_LOG(LogTemp, Warning, TEXT("Failed to setup port COM%d. Error: %08X"), nPort, dwError);
 		return false;
 	}
 
