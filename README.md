@@ -8,6 +8,9 @@ This plugin is intended to be used by pair with an arduino setup that read power
 <img src="Resources/readme_resources/arduino_monitoring_setup.jpg" alt="arduino setup" style="height:25em; width: auto; display: block; margin: auto">
 <br>
 
+<img src="Resources/readme_resources/ElectricalSchematic.PNG" alt="arduino setup" style="height:25em; width: auto; display: block; margin: auto">
+<br>
+
 This is the code running on the esp32:
 
 ```cpp
